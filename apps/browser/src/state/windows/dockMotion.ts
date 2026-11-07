@@ -5,7 +5,10 @@ import type { LightsPlace } from "../../platform/windows";
 
 export const LIGHTS_CENTER: readonly [number, number] = [25, CARD_INSET + 21];
 const COMPACT_LIGHTS_CENTER: readonly [number, number] = [LIGHTS_CENTER[0], LIGHTS_CENTER[1] - compactLift(toolbarRowOf(true))];
-export const toolbarLightsCenter = (compact: boolean): readonly [number, number] => (compact ? COMPACT_LIGHTS_CENTER : LIGHTS_CENTER);
+const EDGE_LIGHTS_CENTER: readonly [number, number] = [LIGHTS_CENTER[0], LIGHTS_CENTER[1] - CARD_INSET];
+const EDGE_COMPACT_LIGHTS_CENTER: readonly [number, number] = [COMPACT_LIGHTS_CENTER[0], COMPACT_LIGHTS_CENTER[1] - CARD_INSET];
+export const toolbarLightsCenter = (compact: boolean, edgeToEdge: boolean): readonly [number, number] =>
+  edgeToEdge ? (compact ? EDGE_COMPACT_LIGHTS_CENTER : EDGE_LIGHTS_CENTER) : compact ? COMPACT_LIGHTS_CENTER : LIGHTS_CENTER;
 export const ARC_LIGHTS_CENTER: readonly [number, number] = [25, 24];
 export const TOP_STRIP_LIGHTS_CENTER: readonly [number, number] = [20.75, 20.75];
 

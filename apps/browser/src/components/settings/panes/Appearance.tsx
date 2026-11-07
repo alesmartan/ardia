@@ -42,6 +42,7 @@ export function AppearancePane() {
       </Box>
       <InterfaceStylePicker />
       <AddressBarPicker />
+      <WindowSection />
       <BookmarksBarSection />
       <SelectedTabGlowPicker />
       <ScrollBarsPicker />
@@ -148,6 +149,20 @@ function AddressBarPicker() {
         </Row>
         </Group>
       </Box>
+    </>
+  );
+}
+
+function WindowSection() {
+  const edgeToEdge = useSettings((s) => s.edgeToEdge);
+  return (
+    <>
+      <SectionHeader title="Window" />
+      <Group>
+        <Row anchor="appearance.edgeToEdge">
+          <Toggle value={edgeToEdge} onChange={(v) => updateSettings({ edgeToEdge: v })} />
+        </Row>
+      </Group>
     </>
   );
 }

@@ -315,6 +315,16 @@ export const generalRows = {
       },
     },
     {
+      section: "Window",
+      rows: {
+        edgeToEdge: {
+          title: "Edge to edge",
+          description: "Pages fill the window, with no 9 pt frame or rounded corners around them. The sidebar stays as it is.",
+          keywords: ["borderless", "border", "frame", "margin", "padding", "inset", "rounded corners", "full bleed", "edge to edge", "page frame"],
+        },
+      },
+    },
+    {
       section: "Bookmarks Bar",
       rows: {
         bookmarksBar: {

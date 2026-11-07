@@ -36,6 +36,7 @@ import {
   TOP_STRIP_HEIGHT,
 } from "./tokens";
 import { WindowDropGlow } from "./WindowDropGlow";
+import { usePageFrame } from "../window/pageFrame";
 
 export { TOP_STRIP_HEIGHT } from "./tokens";
 
@@ -104,6 +105,7 @@ export function TopStripPeek({ windowWidth, enabled }: { windowWidth: number; en
   const theme = useTheme();
   const windowId = useWindowId();
   const downloadsOpen = useWindowUiOf(windowId, (u) => !!u?.downloadsOpen);
+  const edgeToEdge = usePageFrame().edgeToEdge;
   const { slide, live, show, hide, recheck, cancelPending } = usePeek(enabled, false, () => downloadsOpenIn(windowId));
   useEffect(() => {
     if (!downloadsOpen) recheck();
@@ -126,6 +128,7 @@ export function TopStripPeek({ windowWidth, enabled }: { windowWidth: number; en
     <>
       {enabled ? (
         <View
+          pointerEvents={edgeToEdge ? "none" : "auto"}
           onMouseEnter={show}
           onMouseLeave={leaveStrip}
           style={{ position: "absolute", left: layout.trafficLightsWidth, right: PEEK_LEFT, top: 0, height: PEEK_HOVER_HEIGHT }}

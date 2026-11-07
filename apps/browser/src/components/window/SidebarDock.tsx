@@ -2,7 +2,7 @@ import { onWindowEvent, watchSidebarEdge } from "../../state/windows/nativeWindo
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 import { switchOn } from "../../state/app/switches";
-import { layout, useTheme } from "../ui/theme";
+import { useTheme } from "../ui/theme";
 import { spring, curve } from "../ui/motion";
 import { Panel, reduceMotion, WindowDragRegion } from "../ui";
 import { useSidebarSide, useWindowId } from "../../state/browser/hooks";
@@ -39,6 +39,7 @@ import {
 } from "../../state/windows/dockMotion";
 import { useTabDrag } from "../../state/drag/tabDrag";
 import { usePeek } from "./usePeek";
+import { usePageFrame } from "./pageFrame";
 import { useSidebarLights, useTopStripLights } from "./useDockLights";
 
 const SPRING = spring(DOCK_SPRING);
@@ -105,6 +106,7 @@ export function DockedLayout({
   const toolbarLights = useToolbarLightsCenter();
   const lights = addressBar && !topTabs ? ARC_LIGHTS_CENTER : toolbarLights;
   const { dock, away } = useSidebarDock(open, !fullscreen, arc);
+  const frame = usePageFrame();
   const sideInset = right ? inset.right : inset.left;
   const edge = useMemo(
     () =>
@@ -114,7 +116,7 @@ export function DockedLayout({
       }),
     [dock, width, sideInset],
   );
-  const top = useMemo(() => dock.interpolate({ inputRange: [0, 1], outputRange: [layout.cardInset, inset.top] }), [dock, inset.top]);
+  const top = useMemo(() => dock.interpolate({ inputRange: [0, 1], outputRange: [frame.inset, inset.top] }), [dock, frame.inset, inset.top]);
   const stripY = useMemo(() => dock.interpolate({ inputRange: [0, 1], outputRange: [-inset.top, 0] }), [dock, inset.top]);
   const stripShown = topTabs && (open || !away);
   const moving = useDockMotion((m) => !!m.moving[windowId]);
@@ -185,6 +187,7 @@ function SidebarDock({
 }) {
   const theme = useTheme();
   const windowId = useWindowId();
+  const frame = usePageFrame();
   const moving = useDockMotion((m) => !!m.moving[windowId]);
   const edgeOver = useRef(false);
   const peek = usePeek(!open && !moving && !fullscreen, arc, () => edgeOver.current || peekHeld(windowId), () => dismissHoverIn(windowId));
@@ -271,14 +274,14 @@ function SidebarDock({
       )}
       {strip.current && (
         <View
-          pointerEvents={!open && !fullscreen ? "auto" : "none"}
+          pointerEvents={!open && !fullscreen && !frame.edgeToEdge ? "auto" : "none"}
           onMouseEnter={peek.show}
           onMouseLeave={leaveStrip}
           style={{
             position: "absolute",
             [edgeSide]: 0,
             top: 0,
-            bottom: layout.cardInset,
+            bottom: frame.inset,
             width: !open && !fullscreen ? PEEK_EDGE_STRIP : 0,
           }}
         />

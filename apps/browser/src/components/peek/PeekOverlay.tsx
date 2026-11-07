@@ -10,6 +10,7 @@ import { PEEK_MOTION, PEEK_SCRIM } from "./tokens";
 import { PageLabel, SMALL_INSET, SMALL_WINDOW_FRAME, SMALL_WINDOW_RADIUS, SmallBar } from "../littleArdia/SmallChrome";
 import { dismissPeek, finishPeek, openPeekAsTab, openPeekInSplit, registerPeekMotion } from "../../state/peek/actions";
 import { pinchFollow, pinchOutcome } from "./pinch";
+import { usePageFrame } from "../window/pageFrame";
 
 const INSET_FRACTION = 0.055;
 const MIN_INSET = 16;
@@ -61,6 +62,7 @@ function PeekCard({
   page: (tabId: string, sourceId: string, width: number) => ReactNode;
 }) {
   const theme = useTheme();
+  const pageRadius = usePageFrame().radius;
   const windowFrame = theme.dark ? SMALL_WINDOW_FRAME.dark : SMALL_WINDOW_FRAME.light;
   const frame = peekFrame(width, height);
   const [motion, setMotion] = useState<"fade" | "grow" | null>(() => {
@@ -153,7 +155,7 @@ function PeekCard({
         <Pressable
           accessibilityLabel="Close Peek"
           onPress={() => dismissPeek(windowId)}
-          style={{ flex: 1, borderRadius: layout.cardRadius, backgroundColor: theme.dark ? PEEK_SCRIM.dark : PEEK_SCRIM.light }}
+          style={{ flex: 1, borderRadius: pageRadius, backgroundColor: theme.dark ? PEEK_SCRIM.dark : PEEK_SCRIM.light }}
         />
       </Animated.View>
       <Animated.View

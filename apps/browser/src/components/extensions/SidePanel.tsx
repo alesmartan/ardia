@@ -11,6 +11,7 @@ import { EXTENSION_PAGE_BACKGROUND, SIDE_PANEL_HEADER_PAD_RIGHT } from "./tokens
 import { closeSidePanel, findExtension, showExtensionMenu, useExtensions, type SidePanel } from "../../state/extensions/actions";
 import { curve, duration } from "../ui/motion";
 import { GLYPH } from "../toolbar/tokens";
+import { usePageFrame } from "../window/pageFrame";
 
 const MIN_WIDTH = 320;
 const MAX_WIDTH = 600;
@@ -93,11 +94,12 @@ export function ExtensionSidePanel() {
 function PanelCard({ windowId, panel }: { windowId: string; panel: SidePanel }) {
   const { extensionId, profile, pageProfile, url } = panel;
   const theme = useTheme();
+  const pageRadius = usePageFrame().radius;
   const ext = useExtensions((e) => e.lists[profile]?.find((x) => x.id === extensionId));
   const title = ext?.actionTitle || ext?.name || "Extension";
   const icon = ext?.actionIcon || ext?.icon;
   return (
-    <View style={{ flex: 1, borderRadius: layout.cardRadius, overflow: "hidden", backgroundColor: theme.card }}>
+    <View style={{ flex: 1, borderRadius: pageRadius, overflow: "hidden", backgroundColor: theme.card }}>
       <Box row gap="m" style={HEADER_ROW}>
         {icon ? <Image source={{ uri: icon }} style={{ width: 16, height: 16 }} /> : null}
         <Text numberOfLines={1} weight="medium" style={FLEX}>

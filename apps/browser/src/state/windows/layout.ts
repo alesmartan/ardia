@@ -37,11 +37,12 @@ export function openingLightsCenter(s: BrowserState, windowId: string): LightsPl
   const open = w.sidebarOpen ?? true;
   if (tabLayoutOf(s, w.id) === "top") return open ? [...TOP_STRIP_LIGHTS_CENTER] : lightsCenter(DEFAULT_SIDEBAR_WIDTH);
   const width = s.settings.sidebarWidth;
-  const base = s.settings.addressBar === "sidebar" ? ARC_LIGHTS_CENTER : toolbarLightsCenter(s.settings.compactToolbar);
+  const base = s.settings.addressBar === "sidebar" ? ARC_LIGHTS_CENTER : toolbarLightsCenter(s.settings.compactToolbar, s.settings.edgeToEdge);
   return sidebarLightsCenter(sidebarSideOf(s, w.id) === "right", width, open ? 0 : width, 0, base);
 }
 
-export const useToolbarLightsCenter = (): readonly [number, number] => toolbarLightsCenter(useBrowser((s) => s.settings.compactToolbar));
+export const useToolbarLightsCenter = (): readonly [number, number] =>
+  toolbarLightsCenter(useBrowser((s) => s.settings.compactToolbar), useBrowser((s) => s.settings.edgeToEdge));
 
 type UrlAnchor = { left: number; top: number; width: number; sidebar?: { height: number } };
 
